@@ -5,29 +5,53 @@ import sendMail, { sendForgotMail } from "../middlewares/sendMail.js";
 import TryCatch from "../middlewares/TryCatch.js";
 
 export const register = TryCatch(async (req, res) => {
-  const { email, name, password } = req.body;
+  const { parentName, parentEmail, studentName, studentEmail, password, age, studentClass, mobile } = req.body;
 
-  let user = await User.findOne({ email });
+  // Check if either email already exists
+  let parentUser = await User.findOne({ email: parentEmail });
+  let studentUser = await User.findOne({ email: studentEmail });
 
-  if (user)
+  if (parentUser || studentUser) {
     return res.status(400).json({
-      message: "User Already exists",
+      message: "Parent or Student already registered with these emails.",
     });
+  }
 
   const hashPassword = await bcrypt.hash(password, 10);
 
-  user = {
-    name,
-    email,
+  // Create parent user
+  parentUser = {
+    name: parentName,
+    email: parentEmail,
     password: hashPassword,
+    role: "parent",
+    mainrole: "parent",
+    age,
+    studentClass,
+    mobile,
+    childEmail: studentEmail, // for reference
+  };
+
+  // Create student user
+  studentUser = {
+    name: studentName,
+    email: studentEmail,
+    password: hashPassword,
+    role: "user",
+    mainrole: "user",
+    age,
+    studentClass,
+    mobile,
+    parentEmail: parentEmail, // for reference
   };
 
   const otp = Math.floor(Math.random() * 1000000);
 
   const activationToken = jwt.sign(
     {
-      user,
+      user: parentUser,
       otp,
+      studentUser,
     },
     process.env.Activation_Secret,
     {
@@ -36,14 +60,16 @@ export const register = TryCatch(async (req, res) => {
   );
 
   const data = {
-    name,
+    name: parentName,
     otp,
   };
 
-  await sendMail(email, "E learning", data);
+  await sendMail(parentEmail, "E learning", data);
+  // Optionally send to student as well
+  // await sendMail(studentEmail, "E learning", data);
 
   res.status(200).json({
-    message: "Otp send to your mail",
+    message: "Otp sent to parent email.",
     activationToken,
   });
 });
@@ -63,20 +89,39 @@ export const verifyUser = TryCatch(async (req, res) => {
       message: "Wrong Otp",
     });
 
+  // Create both parent and student users
   await User.create({
     name: verify.user.name,
     email: verify.user.email,
     password: verify.user.password,
+    role: verify.user.role || "parent",
+    mainrole: verify.user.mainrole || "parent",
+    age: verify.user.age,
+    studentClass: verify.user.studentClass,
+    mobile: verify.user.mobile,
+    childEmail: verify.user.childEmail,
+  });
+  await User.create({
+    name: verify.studentUser.name,
+    email: verify.studentUser.email,
+    password: verify.studentUser.password,
+    role: verify.studentUser.role || "user",
+    mainrole: verify.studentUser.mainrole || "user",
+    age: verify.studentUser.age,
+    studentClass: verify.studentUser.studentClass,
+    mobile: verify.studentUser.mobile,
+    parentEmail: verify.studentUser.parentEmail,
   });
 
   res.json({
-    message: "User Registered",
+    message: "Parent and Student Registered",
   });
 });
 
 export const loginUser = TryCatch(async (req, res) => {
   const { email, password } = req.body;
 
+  // Try to find user by either parent or student email
   const user = await User.findOne({ email });
 
   if (!user)
@@ -88,7 +133,7 @@ export const loginUser = TryCatch(async (req, res) => {
 
   if (!mathPassword)
     return res.status(400).json({
-      message: "wrong Password",
+      message: "Wrong Password",
     });
 
   const token = jwt.sign({ _id: user._id }, process.env.Jwt_Sec, {
@@ -104,8 +149,86 @@ export const loginUser = TryCatch(async (req, res) => {
 
 export const myProfile = TryCatch(async (req, res) => {
   const user = await User.findById(req.user._id);
-
   res.json({ user });
+});
+
+// --- Parent-Child Management Endpoints ---
+
+// Parent: Add a child by student email
+export const addChild = TryCatch(async (req, res) => {
+  const parent = await User.findById(req.user._id);
+  if (!parent || parent.role !== 'parent') {
+    return res.status(403).json({ message: 'Only parents can add children.' });
+  }
+  const { studentEmail, studentPassword } = req.body;
+  const student = await User.findOne({ email: studentEmail, role: 'user' });
+  if (!student) {
+    return res.status(404).json({ message: 'No student found with that email.' });
+  }
+  const passwordMatch = await bcrypt.compare(studentPassword, student.password);
+  if (!passwordMatch) {
+    return res.status(401).json({ message: 'Incorrect student password.' });
+  }
+  if (parent.children.includes(student._id)) {
+    return res.status(400).json({ message: 'Student already linked.' });
+  }
+  parent.children.push(student._id);
+  await parent.save();
+  res.json({ message: 'Student linked successfully.', children: parent.children });
+});
+
+// Parent: Remove a child
+export const removeChild = TryCatch(async (req, res) => {
+  const parent = await User.findById(req.user._id);
+  if (!parent || parent.role !== 'parent') {
+    return res.status(403).json({ message: 'Only parents can remove children.' });
+  }
+  const { studentId } = req.body;
+  parent.children = parent.children.filter(
+    (id) => id.toString() !== studentId
+  );
+  await parent.save();
+  res.json({ message: 'Student removed.', children: parent.children });
+});
+
+// Parent: Get all linked children
+export const getChildren = TryCatch(async (req, res) => {
+  const parent = await User.findById(req.user._id).populate('children');
+  if (!parent || parent.role !== 'parent') {
+    return res.status(403).json({ message: 'Only parents can view children.' });
+  }
+  res.json({ children: parent.children });
+});
+
+// Parent: Get linked child's course progress
+export const getChildProgress = TryCatch(async (req, res) => {
+  const parent = await User.findById(req.user._id);
+  if (!parent || parent.role !== 'parent') {
+    return res.status(403).json({ message: 'Only parents can view child progress.' });
+  }
+  const { studentId } = req.body;
+  if (!parent.children.includes(studentId)) {
+    return res.status(403).json({ message: 'This student is not linked to your account.' });
+  }
+  // Fetch student's courses and progress
+  const student = await User.findById(studentId);
+  if (!student) {
+    return res.status(404).json({ message: 'Student not found.' });
+  }
+  // Import Progress and Courses models here or at top
+  const { Progress } = await import('../models/Progress.js');
+  const { Courses } = await import('../models/Courses.js');
+  const progresses = await Progress.find({ user: student._id });
+  const courseProgress = await Promise.all(progresses.map(async (p) => {
+    const course = await Courses.findById(p.course);
+    return {
+      courseId: course._id,
+      courseTitle: course.title,
+      completedLectures: p.completedLectures.length,
+      progressId: p._id
+    };
+  }));
+  res.json({ courses: courseProgress });
 });
 
 export const forgotPassword = TryCatch(async (req, res) => {

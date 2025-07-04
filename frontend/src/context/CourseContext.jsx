@@ -29,16 +29,27 @@ export const CourseContextProvider = ({ children }) => {
   }
 
   async function fetchMyCourse() {
+    const token = localStorage.getItem("token");
+    
+    // Only fetch user courses if there's a token
+    if (!token) {
+      return;
+    }
+
     try {
       const { data } = await axios.get(`${server}/api/mycourse`, {
         headers: {
-          token: localStorage.getItem("token"),
+          token: token,
         },
       });
 
       setMyCourse(data.courses);
     } catch (error) {
       console.log(error);
+      // Clear invalid token
+      if (error.response?.status === 403) {
+        localStorage.removeItem("token");
+      }
     }
   }
 

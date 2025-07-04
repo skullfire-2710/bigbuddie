@@ -1,0 +1,208 @@
+import React from 'react';
+
+const Dashbord = ({ user }) => {
+  console.log('Dashboard component rendered with user:', user);
+  
+  // Simple test data
+  const testCourses = [
+    { _id: '1', title: 'Introduction to Coding', progress: 35 },
+    { _id: '2', title: 'Web Development Basics', progress: 15 },
+  ];
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#f8f9fa',
+      fontFamily: 'Poppins, sans-serif',
+      padding: '20px'
+    }}>
+      {/* Header */}
+      <header style={{
+        backgroundColor: '#62B6CB',
+        color: 'white',
+        padding: '40px 20px',
+        borderRadius: '10px',
+        marginBottom: '30px',
+        textAlign: 'center'
+      }}>
+        <h1 style={{
+          fontSize: '2.5rem',
+          margin: '0 0 10px',
+          fontFamily: 'Baloo 2, cursive'
+        }}>
+          Welcome to Your Dashboard
+        </h1>
+        <p style={{ fontSize: '1.2rem', opacity: 0.9 }}>
+          {user ? `Hello, ${user.name || 'Learner'}!` : 'Loading your learning journey...'}
+        </p>
+      </header>
+
+      {/* Main Content */}
+      <main style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 20px'
+      }}>
+        {/* Courses Section */}
+        <section style={{ marginBottom: '40px' }}>
+          <h2 style={{
+            color: '#333',
+            fontSize: '1.8rem',
+            marginBottom: '20px',
+            fontFamily: 'Baloo 2, cursive'
+          }}>
+            Your Courses
+          </h2>
+          
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '20px',
+            marginBottom: '30px'
+          }}>
+            {testCourses.map(course => (
+              <div key={course._id} style={{
+                backgroundColor: 'white',
+                borderRadius: '10px',
+                padding: '20px',
+                boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+              }}>
+                <h3 style={{
+                  margin: '0 0 15px',
+                  color: '#333',
+                  fontSize: '1.2rem'
+                }}>
+                  {course.title}
+                </h3>
+                <div style={{
+                  height: '8px',
+                  backgroundColor: '#e9ecef',
+                  borderRadius: '4px',
+                  marginBottom: '15px',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    width: `${course.progress}%`,
+                    height: '100%',
+                    backgroundColor: '#62B6CB',
+                    borderRadius: '4px'
+                  }}></div>
+                </div>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}>
+                  <span style={{ color: '#6c757d', fontSize: '0.9rem' }}>
+                    {course.progress}% Complete
+                  </span>
+                  <button style={{
+                    backgroundColor: '#62B6CB',
+                    color: 'white',
+                    border: 'none',
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    cursor: 'pointer',
+                    fontSize: '0.9rem',
+                    transition: 'background-color 0.2s'
+                  }}>
+                    Continue
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Quick Actions */}
+        <section>
+          <h2 style={{
+            color: '#333',
+            fontSize: '1.8rem',
+            marginBottom: '20px',
+            fontFamily: 'Baloo 2, cursive'
+          }}>
+            Quick Actions
+          </h2>
+          <div style={{
+            display: 'flex',
+            gap: '20px',
+            flexWrap: 'wrap'
+          }}>
+            <button style={{
+              flex: 1,
+              minWidth: '200px',
+              backgroundColor: 'white',
+              border: '2px solid #62B6CB',
+              color: '#62B6CB',
+              padding: '20px',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              fontWeight: '600',
+              transition: 'all 0.2s',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <span style={{
+                fontSize: '2rem',
+                lineHeight: 1
+              }}>📚</span>
+              Browse Courses
+            </button>
+            <button style={{
+              flex: 1,
+              minWidth: '200px',
+              backgroundColor: 'white',
+              border: '2px solid #62B6CB',
+              color: '#62B6CB',
+              padding: '20px',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              fontWeight: '600',
+              transition: 'all 0.2s',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <span style={{
+                fontSize: '2rem',
+                lineHeight: 1
+              }}>🎯</span>
+              Set Goals
+            </button>
+            <button style={{
+              flex: 1,
+              minWidth: '200px',
+              backgroundColor: 'white',
+              border: '2px solid #62B6CB',
+              color: '#62B6CB',
+              padding: '20px',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              fontSize: '1rem',
+              fontWeight: '600',
+              transition: 'all 0.2s',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <span style={{
+                fontSize: '2rem',
+                lineHeight: 1
+              }}>📊</span>
+              View Progress
+            </button>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+};
+
+export default Dashbord;

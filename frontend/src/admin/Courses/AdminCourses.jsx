@@ -47,6 +47,13 @@ const AdminCourses = ({ user }) => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    
+    // Basic validation
+    if (!title || !description || !category || !price || !createdBy || !duration || !image) {
+      toast.error('Please fill all fields and select an image');
+      return;
+    }
+    
     setBtnLoading(true);
 
     const myForm = new FormData();
@@ -60,15 +67,18 @@ const AdminCourses = ({ user }) => {
     myForm.append("file", image);
 
     try {
-      const { data } = await axios.post(`${server}/api/course/new`, myForm, {
+      const { data } = await axios.post(`${server}/api/v1/course/new`, myForm, {
         headers: {
-          token: localStorage.getItem("token"),
+          'Content-Type': 'multipart/form-data',
+          withCredentials: true
         },
       });
 
-      toast.success(data.message);
+      toast.success(data.message || 'Course created successfully!');
       setBtnLoading(false);
       await fetchCourses();
+      
+      // Reset form fields after successful submission
       setImage("");
       setTitle("");
       setDescription("");
@@ -78,93 +88,189 @@ const AdminCourses = ({ user }) => {
       setPrice("");
       setCategory("");
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.error('Error creating course:', error);
+      toast.error(error.response?.data?.message || 'Error creating course. Please try again.');
+      setBtnLoading(false);
     }
   };
 
   return (
     <Layout>
-      <div className="admin-courses">
-        <div className="left">
-          <h1>All Courses</h1>
-          <div className="dashboard-content">
-            {courses && courses.length > 0 ? (
-              courses.map((e) => {
-                return <CourseCard key={e._id} course={e} />;
-              })
-            ) : (
-              <p>No Courses Yet</p>
-            )}
-          </div>
+      <div className="admin-courses-page">
+        <div className="admin-courses-header">
+          <h1>Course Management</h1>
+          <p>Create and manage your BigBuddie skill programs</p>
         </div>
+        
+        <div className="admin-courses-container">
+          <div className="courses-list-section">
+            <div className="section-header">
+              <h2>All Courses</h2>
+              <span className="course-count">{courses?.length || 0} courses</span>
+            </div>
+            
+            <div className="dashboard-courses-grid">
+              {courses && courses.length > 0 ? (
+                courses.map((course) => (
+                  <CourseCard key={course._id} course={course} />
+                ))
+              ) : (
+                <div className="no-courses-message">
+                  <div className="icon">📚</div>
+                  <h3>No Courses Available</h3>
+                  <p>Create your first course using the form on the right.</p>
+                </div>
+              )}
+            </div>
+          </div>
 
-        <div className="right">
-          <div className="add-course">
-            <div className="course-form">
-              <h2>Add Course</h2>
-              <form onSubmit={submitHandler}>
-                <label htmlFor="text">Title</label>
-                <input
-                  type="text"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  required
-                />
+          <div className="course-form-section">
+            <div className="course-form-container">
+              <div className="form-header">
+                <h2>Create New Course</h2>
+                <p>Fill in the details to add a new skill program</p>
+              </div>
+              
+              <form onSubmit={submitHandler} className="course-creation-form">
+                <div className="form-group">
+                  <label htmlFor="title">Course Title</label>
+                  <input
+                    id="title"
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    placeholder="e.g., Creative Thinking for Kids"
+                    required
+                  />
+                </div>
 
-                <label htmlFor="text">Description</label>
-                <input
-                  type="text"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  required
-                />
+                <div className="form-group">
+                  <label htmlFor="description">Description</label>
+                  <textarea
+                    id="description"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Briefly describe what children will learn"
+                    rows="4"
+                    required
+                  ></textarea>
+                </div>
 
-                <label htmlFor="text">Price</label>
-                <input
-                  type="number"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  required
-                />
+                <div className="form-row">
+                  <div className="form-group half">
+                    <label htmlFor="price">Price (₹)</label>
+                    <input
+                      id="price"
+                      type="number"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                      placeholder="e.g., 499"
+                      min="0"
+                      required
+                    />
+                  </div>
 
-                <label htmlFor="text">createdBy</label>
-                <input
-                  type="text"
-                  value={createdBy}
-                  onChange={(e) => setCreatedBy(e.target.value)}
-                  required
-                />
+                  <div className="form-group half">
+                    <label htmlFor="duration">Duration (hours)</label>
+                    <input
+                      id="duration"
+                      type="number"
+                      value={duration}
+                      onChange={(e) => setDuration(e.target.value)}
+                      placeholder="e.g., 8"
+                      min="1"
+                      required
+                    />
+                  </div>
+                </div>
 
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                >
-                  <option value={""}>Select Category</option>
-                  {categories.map((e) => (
-                    <option value={e} key={e}>
-                      {e}
-                    </option>
-                  ))}
-                </select>
+                <div className="form-row">
+                  <div className="form-group half">
+                    <label htmlFor="createdBy">Instructor</label>
+                    <input
+                      id="createdBy"
+                      type="text"
+                      value={createdBy}
+                      onChange={(e) => setCreatedBy(e.target.value)}
+                      placeholder="e.g., Ms. Priya Sharma"
+                      required
+                    />
+                  </div>
 
-                <label htmlFor="text">Duration</label>
-                <input
-                  type="number"
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                  required
-                />
+                  <div className="form-group half">
+                    <label htmlFor="category">Category</label>
+                    <select
+                      id="category"
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      required
+                    >
+                      <option value="">Select Category</option>
+                      {categories.map((category) => (
+                        <option value={category} key={category}>
+                          {category}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
 
-                <input type="file" required onChange={changeImageHandler} />
-                {imagePrev && <img src={imagePrev} alt="" width={300} />}
+                <div className="form-group">
+                  <label htmlFor="courseImage">Course Thumbnail</label>
+                  <div className="file-upload-container">
+                    <input 
+                      id="courseImage" 
+                      type="file" 
+                      accept="image/*"
+                      onChange={changeImageHandler} 
+                      required 
+                    />
+                    <div className="upload-instructions">
+                      <span>Click to upload image (16:9 ratio recommended)</span>
+                    </div>
+                  </div>
+                  
+                  {imagePrev && (
+                    <div className="image-preview">
+                      <img src={imagePrev} alt="Course thumbnail preview" />
+                    </div>
+                  )}
+                </div>
 
-                <button
-                  type="submit"
-                  disabled={btnLoading}
-                  className="common-btn"
-                >
-                  {btnLoading ? "Please Wait..." : "Add"}
-                </button>
+                <div className="form-actions">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setTitle('');
+                      setDescription('');
+                      setPrice('');
+                      setCreatedBy('');
+                      setCategory('');
+                      setDuration('');
+                      setImage('');
+                      setImagePrev('');
+                    }}
+                    className="reset-btn"
+                    disabled={btnLoading}
+                  >
+                    Reset Form
+                  </button>
+                  
+                  <button
+                    type="submit"
+                    disabled={btnLoading}
+                    className="submit-btn"
+                  >
+                    {btnLoading ? (
+                      <>
+                        <span className="spinner"></span>
+                        Creating...
+                      </>
+                    ) : (
+                      'Create Course'
+                    )}
+                  </button>
+                </div>
               </form>
             </div>
           </div>

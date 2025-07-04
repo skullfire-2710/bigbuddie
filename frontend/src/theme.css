@@ -1,0 +1,597 @@
+/* ===============================
+   BIGBUDDIE CHILDREN'S THEME SYSTEM
+   The Most Engaging Kids' Learning Platform
+   =============================== */
+
+:root {
+  /* Enhanced Color Palette for Children */
+  --primary-blue: #488FCD;
+  --primary-yellow: #F9ED32;
+  --primary-teal: #00A79D;
+  --primary-gray: #D1D3D4;
+  
+  /* Fun Additional Colors */
+  --fun-purple: #9B59B6;
+  --fun-pink: #E91E63;
+  --fun-orange: #FF9800;
+  --fun-green: #4CAF50;
+  --fun-red: #F44336;
+  
+  /* Derived colors */
+  --blue-light: #6BA3D6;
+  --blue-dark: #2C5F8B;
+  --yellow-light: #FBF366;
+  --yellow-dark: #E6D40A;
+  --teal-light: #1CB8AC;
+  --teal-dark: #006B62;
+  --gray-light: #E8EAEB;
+  --gray-dark: #A8ABAC;
+  
+  /* Semantic colors */
+  --text-primary: #2C3E50;
+  --text-secondary: #5D6D7E;
+  --text-light: #85929E;
+  --white: #FFFFFF;
+  --black: #1C2833;
+  --background: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --border-light: #E5E8EB;
+  
+  /* Enhanced Shadows for Depth */
+  --shadow-soft: 0 2px 8px rgba(72, 143, 205, 0.08);
+  --shadow-medium: 0 4px 16px rgba(72, 143, 205, 0.12);
+  --shadow-strong: 0 8px 32px rgba(72, 143, 205, 0.16);
+  --shadow-magical: 0 12px 48px rgba(72, 143, 205, 0.2);
+  
+  /* Fun Gradients */
+  --gradient-rainbow: linear-gradient(135deg, #F9ED32 0%, #488FCD 25%, #00A79D 50%, #9B59B6 75%, #E91E63 100%);
+  --gradient-sunset: linear-gradient(135deg, #FF9800 0%, #F44336 50%, #E91E63 100%);
+  --gradient-ocean: linear-gradient(135deg, #00A79D 0%, #488FCD 50%, #6BA3D6 100%);
+  --gradient-forest: linear-gradient(135deg, #4CAF50 0%, #00A79D 50%, #488FCD 100%);
+  --gradient-magic: linear-gradient(135deg, #9B59B6 0%, #E91E63 50%, #FF9800 100%);
+  
+  /* Typography Scale */
+  --font-xs: 0.75rem;
+  --font-sm: 0.875rem;
+  --font-base: 1rem;
+  --font-lg: 1.125rem;
+  --font-xl: 1.25rem;
+  --font-2xl: 1.5rem;
+  --font-3xl: 1.875rem;
+  --font-4xl: 2.25rem;
+  --font-5xl: 3rem;
+  --font-6xl: 3.75rem;
+  
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  
+  /* Border Radius Scale */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+  
+  /* Animation Timing */
+  --duration-fast: 0.15s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.5s;
+  --duration-slower: 0.75s;
+  
+  /* Interactive States */
+  --hover-scale: 1.05;
+  --active-scale: 0.95;
+  --bounce-scale: 1.1;
+}
+
+/* ===============================
+   MAGICAL ANIMATIONS FOR KIDS
+   =============================== */
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  75% { transform: rotate(-3deg); }
+}
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce-fun {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-15px) scale(1.05); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(249, 237, 50, 0.7);
+  }
+  50% { 
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(249, 237, 50, 0);
+}
+}
+
+@keyframes rainbow-border {
+  0% { border-color: #F9ED32; }
+  16.66% { border-color: #488FCD; }
+  33.33% { border-color: #00A79D; }
+  50% { border-color: #9B59B6; }
+  66.66% { border-color: #E91E63; }
+  83.33% { border-color: #FF9800; }
+  100% { border-color: #F9ED32; }
+}
+
+@keyframes float-magical {
+  0%, 100% { 
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% { 
+    transform: translateY(-8px) rotate(1deg);
+  }
+  66% { 
+    transform: translateY(4px) rotate(-1deg);
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1) rotate(180deg);
+}
+}
+
+@keyframes slide-bounce-in {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px) scale(0.8);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(5px) scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+}
+}
+
+@keyframes zoom-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===============================
+   ENHANCED INTERACTIVE ELEMENTS
+   =============================== */
+
+.btn-magical {
+  position: relative;
+  overflow: hidden;
+  background: var(--gradient-rainbow);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-full);
+  padding: var(--space-4) var(--space-8);
+  font-weight: 700;
+  font-size: var(--font-lg);
+  cursor: pointer;
+  transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+  animation: pulse-glow 3s infinite;
+}
+
+.btn-magical:hover {
+  transform: translateY(-3px) scale(var(--hover-scale));
+  animation: bounce-fun 0.6s ease-in-out;
+}
+
+.btn-magical:active {
+  transform: translateY(-1px) scale(var(--active-scale));
+}
+
+.btn-magical::before {
+  content: '✨';
+  position: absolute;
+  top: 50%;
+  left: -30px;
+  transform: translateY(-50%);
+  font-size: 1.2em;
+  animation: sparkle 2s infinite;
+}
+
+.btn-magical::after {
+  content: '🌟';
+  position: absolute;
+  top: 50%;
+  right: -30px;
+  transform: translateY(-50%);
+  font-size: 1.2em;
+  animation: sparkle 2s infinite 1s;
+}
+
+/* Fun Button Variations */
+.btn-bouncy {
+  animation: bounce-gentle 2s infinite;
+  transition: all var(--duration-normal) ease;
+}
+
+.btn-bouncy:hover {
+  animation: bounce-fun 0.6s ease-in-out;
+  transform: scale(var(--bounce-scale));
+}
+
+.btn-wiggly:hover {
+  animation: wiggle 0.5s ease-in-out;
+}
+
+/* ===============================
+   MAGICAL CARDS FOR KIDS
+   =============================== */
+
+.card-magical {
+  background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+  backdrop-filter: blur(20px);
+  border: 2px solid transparent;
+  border-radius: var(--radius-2xl);
+  padding: var(--space-6);
+  position: relative;
+  overflow: hidden;
+  transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+  animation: rainbow-border 3s linear infinite;
+}
+
+.card-magical::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    transparent,
+    rgba(249, 237, 50, 0.1),
+    transparent,
+    rgba(72, 143, 205, 0.1),
+    transparent,
+    rgba(0, 167, 157, 0.1),
+    transparent
+  );
+  animation: spin 6s linear infinite;
+  pointer-events: none;
+}
+
+.card-magical:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow: var(--shadow-magical);
+  border-color: var(--primary-yellow);
+}
+
+/* ===============================
+   PROGRESS INDICATORS FOR KIDS
+   =============================== */
+
+.progress-rainbow {
+  width: 100%;
+  height: 12px;
+  background: var(--gray-light);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-rainbow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--progress, 0%);
+  background: var(--gradient-rainbow);
+  border-radius: var(--radius-full);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: pulse-glow 2s infinite;
+}
+
+/* ===============================
+   ACHIEVEMENT BADGES
+   =============================== */
+
+.badge-achievement {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--gradient-magic);
+  color: var(--white);
+  border-radius: var(--radius-full);
+  font-size: var(--font-sm);
+  font-weight: 600;
+  animation: float-magical 3s ease-in-out infinite;
+  position: relative;
+}
+
+.badge-achievement::before {
+  content: '🏆';
+  font-size: 1.2em;
+}
+
+.badge-achievement:hover {
+  animation: zoom-bounce-in 0.6s ease-out;
+  transform: scale(1.1);
+}
+
+/* ===============================
+   FUN LOADING ANIMATIONS
+   =============================== */
+
+.loader-rainbow {
+  width: 60px;
+  height: 60px;
+  border: 4px solid var(--gray-light);
+  border-top: 4px solid var(--primary-yellow);
+  border-right: 4px solid var(--primary-blue);
+  border-bottom: 4px solid var(--primary-teal);
+  border-left: 4px solid var(--fun-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-bouncing-dots {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-bouncing-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  animation: bouncing-dots 1.4s ease-in-out infinite both;
+}
+
+.loader-bouncing-dots span:nth-child(1) {
+  background: var(--primary-yellow);
+  animation-delay: -0.32s;
+}
+
+.loader-bouncing-dots span:nth-child(2) {
+  background: var(--primary-blue);
+  animation-delay: -0.16s;
+}
+
+.loader-bouncing-dots span:nth-child(3) {
+  background: var(--primary-teal);
+}
+
+@keyframes bouncing-dots {
+  0%, 80%, 100% {
+    transform: scale(0);
+  }
+  40% {
+    transform: scale(1);
+}
+}
+
+/* ===============================
+   INTERACTIVE HOVER EFFECTS
+   =============================== */
+
+.hover-lift {
+  transition: all var(--duration-normal) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--shadow-strong);
+}
+
+.hover-glow {
+  transition: all var(--duration-normal) ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(249, 237, 50, 0.6);
+  transform: scale(1.05);
+}
+
+.hover-rainbow {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-rainbow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: left 0.5s;
+}
+
+.hover-rainbow:hover::before {
+  left: 100%;
+}
+
+/* ===============================
+   CHILD-FRIENDLY FORM ELEMENTS
+   =============================== */
+
+.input-magical {
+  width: 100%;
+  padding: var(--space-4) var(--space-6);
+  border: 3px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  font-size: var(--font-lg);
+  background: var(--white);
+  transition: all var(--duration-normal) ease;
+  position: relative;
+}
+
+.input-magical:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 4px rgba(72, 143, 205, 0.2);
+  transform: scale(1.02);
+}
+
+.input-magical:hover {
+  border-color: var(--primary-yellow);
+  box-shadow: var(--shadow-medium);
+}
+
+/* ===============================
+   NOTIFICATION TOASTS
+   =============================== */
+
+.toast-success {
+  background: var(--gradient-forest);
+  color: var(--white);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-xl);
+  animation: slide-bounce-in 0.6s ease-out;
+}
+
+.toast-error {
+  background: var(--gradient-sunset);
+  color: var(--white);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-xl);
+  animation: slide-bounce-in 0.6s ease-out;
+}
+
+.toast-info {
+  background: var(--gradient-ocean);
+  color: var(--white);
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-xl);
+  animation: slide-bounce-in 0.6s ease-out;
+}
+
+/* ===============================
+   UTILITY CLASSES
+   =============================== */
+
+.text-gradient-rainbow {
+  background: var(--gradient-rainbow);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+}
+
+.bg-gradient-rainbow { background: var(--gradient-rainbow); }
+.bg-gradient-sunset { background: var(--gradient-sunset); }
+.bg-gradient-ocean { background: var(--gradient-ocean); }
+.bg-gradient-forest { background: var(--gradient-forest); }
+.bg-gradient-magic { background: var(--gradient-magic); }
+
+.animate-wiggle { animation: wiggle 0.5s ease-in-out; }
+.animate-bounce-gentle { animation: bounce-gentle 2s infinite; }
+.animate-bounce-fun { animation: bounce-fun 0.6s ease-in-out; }
+.animate-pulse-glow { animation: pulse-glow 3s infinite; }
+.animate-float-magical { animation: float-magical 3s ease-in-out infinite; }
+.animate-sparkle { animation: sparkle 2s infinite; }
+.animate-rainbow-border { animation: rainbow-border 3s linear infinite; }
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 768px) {
+  :root {
+    --font-5xl: 2.5rem;
+    --font-4xl: 2rem;
+    --font-3xl: 1.5rem;
+    --space-16: 3rem;
+    --space-20: 4rem;
+  }
+  
+  .btn-magical {
+    padding: var(--space-3) var(--space-6);
+    font-size: var(--font-base);
+  }
+  
+  .card-magical {
+    padding: var(--space-4);
+  }
+}
+
+@media (max-width: 576px) {
+  :root {
+    --font-5xl: 2rem;
+    --font-4xl: 1.75rem;
+    --space-16: 2.5rem;
+    --space-20: 3rem;
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY
+   =============================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .card-magical {
+    border-color: var(--text-primary);
+    background: var(--white);
+  }
+  
+  .btn-magical {
+    border: 2px solid var(--text-primary);
+  }
+}
+
+/* Focus indicators for keyboard navigation */
+.btn-magical:focus-visible,
+.input-magical:focus-visible,
+.card-magical:focus-visible {
+  outline: 3px solid var(--primary-yellow);
+  outline-offset: 2px;
+}

@@ -6,6 +6,9 @@ import {
   register,
   resetPassword,
   verifyUser,
+  addChild,
+  removeChild,
+  getChildren,
 } from "../controllers/user.js";
 import { isAuth } from "../middlewares/isAuth.js";
 import { addProgress, getYourProgress } from "../controllers/course.js";
@@ -20,5 +23,10 @@ router.post("/user/forgot", forgotPassword);
 router.post("/user/reset", resetPassword);
 router.post("/user/progress", isAuth, addProgress);
 router.get("/user/progress", isAuth, getYourProgress);
+
+// --- Parent-Child Management ---
+router.post("/user/parent/add-child", isAuth, addChild);
+router.delete("/user/parent/remove-child", isAuth, removeChild);
+router.get("/user/parent/children", isAuth, getChildren);
 
 export default router;

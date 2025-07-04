@@ -33,15 +33,19 @@ export const UserContextProvider = ({ children }) => {
     }
   }
 
-  async function registerUser(name, email, password, navigate) {
+  async function registerUser({ parentName, parentEmail, studentName, studentEmail, password, age, studentClass, mobile, navigate }) {
     setBtnLoading(true);
     try {
       const { data } = await axios.post(`${server}/api/user/register`, {
-        name,
-        email,
+        parentName,
+        parentEmail,
+        studentName,
+        studentEmail,
         password,
+        age,
+        studentClass,
+        mobile,
       });
-
       toast.success(data.message);
       localStorage.setItem("activationToken", data.activationToken);
       setBtnLoading(false);
@@ -72,10 +76,18 @@ export const UserContextProvider = ({ children }) => {
   }
 
   async function fetchUser() {
+    const token = localStorage.getItem("token");
+    
+    // Only fetch user data if there's a token
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
     try {
       const { data } = await axios.get(`${server}/api/user/me`, {
         headers: {
-          token: localStorage.getItem("token"),
+          token: token,
         },
       });
 
@@ -84,6 +96,8 @@ export const UserContextProvider = ({ children }) => {
       setLoading(false);
     } catch (error) {
       console.log(error);
+      // Clear invalid token
+      localStorage.removeItem("token");
       setLoading(false);
     }
   }

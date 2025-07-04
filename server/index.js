@@ -17,7 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const port = process.env.PORT;
+const port = 5001; // Changed from process.env.PORT to fix port conflict
 
 app.get("/", (req, res) => {
   res.send("Server is working");

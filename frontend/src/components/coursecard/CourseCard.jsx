@@ -10,78 +10,124 @@ import { CourseData } from "../../context/CourseContext";
 const CourseCard = ({ course }) => {
   const navigate = useNavigate();
   const { user, isAuth } = UserData();
-
   const { fetchCourses } = CourseData();
+  
+  // Get instructor initials for avatar
+  const getInitials = (name) => {
+    if (!name) return 'BB';
+    return name
+      .split(' ')
+      .map(part => part[0])
+      .join('')
+      .toUpperCase()
+      .substring(0, 2);
+  };
 
   const deleteHandler = async (id) => {
-    if (confirm("Are you sure you want to delete this course")) {
+    if (window.confirm("Are you sure you want to delete this course?")) {
       try {
-        const { data } = await axios.delete(`${server}/api/course/${id}`, {
-          headers: {
-            token: localStorage.getItem("token"),
-          },
+        const { data } = await axios.delete(`${server}/api/v1/course/${id}`, {
+          withCredentials: true
         });
 
-        toast.success(data.message);
+        toast.success(data.message || 'Course deleted successfully');
         fetchCourses();
       } catch (error) {
-        toast.error(error.response.data.message);
+        toast.error(error.response?.data?.message || 'Error deleting course');
       }
     }
   };
   return (
     <div className="course-card">
-      <img src={`${server}/${course.image}`} alt="" className="course-image" />
-      <h3>{course.title}</h3>
-      <p>Instructor- {course.createdBy}</p>
-      <p>Duration- {course.duration} weeks</p>
-      <p>Price- ₹{course.price}</p>
-      {isAuth ? (
-        <>
-          {user && user.role !== "admin" ? (
+      <div className="course-image">
+        {course.category && (
+          <div className="course-category">{course.category}</div>
+        )}
+        <img 
+          src={course.image ? `${server}/${course.image}` : 'https://via.placeholder.com/400x225?text=BigBuddie+Course'} 
+          alt={course.title || 'Course thumbnail'} 
+        />
+      </div>
+      
+      <div className="course-content">
+        <h3 className="course-title">{course.title}</h3>
+        <p className="course-description">{course.description || 'Explore this exciting skill development program designed for children.'}</p>
+        
+        <div className="course-meta">
+          <div className="course-instructor">
+            <div className="instructor-avatar">{getInitials(course.createdBy)}</div>
+            <span>{course.createdBy}</span>
+          </div>
+          <div className="course-price">₹{course.price}</div>
+        </div>
+        
+        <div className="course-actions">
+          {isAuth ? (
             <>
-              {user.subscription.includes(course._id) ? (
-                <button
-                  onClick={() => navigate(`/course/study/${course._id}`)}
-                  className="common-btn"
-                >
-                  Study
-                </button>
+              {user && user.role !== "admin" ? (
+                <>
+                  {user.subscription && user.subscription.includes(course._id) ? (
+                    <button
+                      onClick={() => navigate(`/course/study/${course._id}`)}
+                      className="enroll-btn"
+                    >
+                      Continue Learning
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => navigate(`/course/${course._id}`)}
+                        className="view-course-btn"
+                      >
+                        View Details
+                      </button>
+                      <button
+                        onClick={() => navigate(`/course/${course._id}`)}
+                        className="enroll-btn"
+                      >
+                        Enroll Now
+                      </button>
+                    </>
+                  )}
+                </>
               ) : (
-                <button
-                  onClick={() => navigate(`/course/${course._id}`)}
-                  className="common-btn"
-                >
-                  Get Started
-                </button>
+                <>
+                  <button
+                    onClick={() => navigate(`/course/study/${course._id}`)}
+                    className="view-course-btn"
+                  >
+                    View Content
+                  </button>
+                  {user && user.role === "admin" && (
+                    <button
+                      onClick={() => deleteHandler(course._id)}
+                      className="enroll-btn"
+                      style={{ backgroundColor: 'var(--danger-color, #dc3545)' }}
+                    >
+                      Delete Course
+                    </button>
+                  )}
+                </>
               )}
             </>
           ) : (
-            <button
-              onClick={() => navigate(`/course/study/${course._id}`)}
-              className="common-btn"
-            >
-              Study
-            </button>
+            <>
+              <button
+                onClick={() => navigate(`/course/${course._id}`)}
+                className="view-course-btn"
+              >
+                View Details
+              </button>
+              <button 
+                onClick={() => navigate("/login")} 
+                className="enroll-btn"
+              >
+                Enroll Now
+              </button>
+            </>
           )}
-        </>
-      ) : (
-        <button onClick={() => navigate("/login")} className="common-btn">
-          Get Started
-        </button>
-      )}
-
-      <br />
-
-      {user && user.role === "admin" && (
-        <button
-          onClick={() => deleteHandler(course._id)}
-          className="common-btn"
-          style={{ background: "red" }}
-        >
-          Delete
-        </button>
-      )}
+        </div>
+      </div>
     </div>
   );
 };
